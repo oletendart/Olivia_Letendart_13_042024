@@ -1,7 +1,8 @@
 import './App.scss';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./pages/Home/Home.jsx"
-import Contact from "./pages/Contact/Contact.jsx";
+import Connection from "./pages/Connection/Connection.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
 
 function App() {
 
@@ -10,7 +11,8 @@ function App() {
       <BrowserRouter>
           <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/contact" element={<Contact />} />
+              <Route path="/connection" element={<Connection />} />
+              <Route path="/profil" element={<Profile />} />
           </Routes>
       </BrowserRouter>
     </>
