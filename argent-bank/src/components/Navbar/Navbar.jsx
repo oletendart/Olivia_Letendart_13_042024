@@ -1,4 +1,5 @@
 import logo from "../../assets/argentBankLogo.png";
+import './Navbar.scss';
 
 export default function Navbar() {
     return (
@@ -12,8 +13,7 @@ export default function Navbar() {
                 <h1 className="sr-only">Argent Bank</h1>
             </a>
             <div>
-                <a className="main-nav-item"
-                   href="./sign-in.html">
+                <a className="main-nav-item">
                     <i className="fa fa-user-circle"></i>
                     Sign In
                 </a>

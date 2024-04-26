@@ -1,3 +1,5 @@
+import './HeroContent.scss';
+
 export default function HeroContent() {
     return (
         <section className="hero-content">

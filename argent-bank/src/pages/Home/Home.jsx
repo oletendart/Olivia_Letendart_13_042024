@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
 import FeatureItem from "../../components/FeatureItem/FeatureItem.jsx";
 import HeroContent from "../../components/HeroContent/HeroContent.jsx";
+import './Home.scss';
 
 export default function Home() {
     return (
