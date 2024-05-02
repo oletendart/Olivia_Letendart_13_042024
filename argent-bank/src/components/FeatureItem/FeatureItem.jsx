@@ -1,3 +1,5 @@
+import './FeatureItem.scss';
+
 export default function FeatureItem({img, alt, title, description}) {
     return (
         <div className="feature-item">

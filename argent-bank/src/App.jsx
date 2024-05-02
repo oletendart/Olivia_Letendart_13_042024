@@ -1,8 +1,8 @@
 import './App.scss';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./pages/Home/Home.jsx"
-import Connection from "./pages/Connection/Connection.jsx";
-import Profile from "./pages/Profile/Profile.jsx";
+import Login from "./pages/Login/Login.jsx";
+import Transaction from "./pages/Transaction/Transaction.jsx";
 
 function App() {
 
@@ -11,8 +11,8 @@ function App() {
       <BrowserRouter>
           <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/connection" element={<Connection />} />
-              <Route path="/profil" element={<Profile />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/transaction" element={<Transaction />} />
           </Routes>
       </BrowserRouter>
     </>
