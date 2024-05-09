@@ -28,7 +28,7 @@ export default function Login() {
                         >
                         </div>
                         {/* PLACEHOLDER DUE TO STATIC SITE */}
-                        <a href="./user.html" className="sign-in-button">Sign In</a>
+                        <button className="sign-in-button">Sign In</button>
                         {/* SHOULD BE THE BUTTON BELOW */}
                         {/* <button class="sign-in-button">Sign In</button> */}
                     </form>
