@@ -1,5 +1,6 @@
 import logo from "../../assets/argentBankLogo.png";
 import './Navbar.scss';
+import {Link} from "react-router-dom";
 
 export default function Navbar() {
     return (
@@ -13,10 +14,10 @@ export default function Navbar() {
                 <h1 className="sr-only">Argent Bank</h1>
             </a>
             <div>
-                <a className="main-nav-item">
+                <Link to="/login" className="main-nav-item">
                     <i className="fa fa-user-circle"></i>
                     Sign In
-                </a>
+                </Link>
             </div>
         </nav>
     )
