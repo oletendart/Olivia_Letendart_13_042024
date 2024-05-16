@@ -28,9 +28,7 @@ export default function Home() {
                     ))}
                 </section>
             </main>
-            <footer>
-                <Footer />
-            </footer>
+            <Footer />
         </>
     )
 }

@@ -22,9 +22,7 @@ export default function Login() {
                     </form>
                 </section>
             </main>
-            <footer>
-                <Footer />
-            </footer>
+            <Footer />
         </>
     )
 }
