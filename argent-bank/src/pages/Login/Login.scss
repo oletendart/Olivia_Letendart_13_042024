@@ -14,13 +14,19 @@
   box-sizing: border-box;
   background-color: white;
   width: 300px;
-  margin: 0 auto;
-  margin-top: 3rem;
   padding: 2rem;
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .sign-in-icon {
   font-size: 5rem;
+}
+
+.login-bg {
+  height: calc(100vh - 137px);
 }
 
 .input-remember {
