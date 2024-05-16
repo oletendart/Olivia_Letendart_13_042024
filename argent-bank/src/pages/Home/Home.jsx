@@ -8,25 +8,29 @@ import jsonData from '../../data/dataFeatureItem.json';
 export default function Home() {
     return (
         <>
-            <Navbar />
+            <header>
+                <Navbar />
+            </header>
             <main>
-                <div className="hero">
+                <section className="hero">
                     <HeroContent />
-                </div>
+                </section>
                 <section className="features">
                     <h2 className="sr-only">Features</h2>
                     {jsonData.map((item, index) => (
-                        <FeatureItem key={index}
-                                     alt={item.alt}
-                                     img={item.img}
-                                     title={item.title}
-                                     description={item.description}
+                        <FeatureItem
+                            key={index}
+                            alt={item.alt}
+                            img={item.img}
+                            title={item.title}
+                            description={item.description}
                         />
-
                     ))}
                 </section>
             </main>
-            <Footer />
+            <footer>
+                <Footer />
+            </footer>
         </>
     )
 }
