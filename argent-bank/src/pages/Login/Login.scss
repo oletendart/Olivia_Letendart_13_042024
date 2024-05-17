@@ -27,6 +27,9 @@
 
 .login-bg {
   height: calc(100vh - 137px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .input-remember {
