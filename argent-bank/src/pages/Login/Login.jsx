@@ -12,7 +12,7 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading, error, user } = useSelector((state) => state.auth);
-    const [credentials, setCredentials] = useState({ username: '', password: '' });
+    const [credentials, setCredentials] = useState({ email: '', password: '' });
 
     const handleChange = (e) => {
         setCredentials({
@@ -25,7 +25,7 @@ export default function Login() {
         e.preventDefault();
         dispatch(loginUser(credentials)).then((result) => {
             if (loginUser.fulfilled.match(result)) {
-                navigate('/transaction');
+                navigate('/profile');
             }
         });
     };
@@ -40,8 +40,8 @@ export default function Login() {
                     <i className="fa fa-user-circle sign-in-icon"></i>
                     <h1>Sign In</h1>
                     <form onSubmit={handleSubmit}>
-                        <InputForm htmlFor="username" text="Username" type="text" id="username" name="username" value={credentials.username} onChange={handleChange} />
-                        <InputForm htmlFor="password" text="Password" type="password" id="password" name="password" value={credentials.password} onChange={handleChange} />
+                        <InputForm htmlFor="email" text="Email" type="email" id="email" name="email" value={credentials.email} onChange={handleChange} required />
+                        <InputForm htmlFor="password" text="Password" type="password" id="password" name="password" value={credentials.password} onChange={handleChange} required />
                         <InputRemember />
                         <button className="sign-in-button" type="submit" disabled={loading}>Sign In</button>
                         {error && <p className="error">{error}</p>}

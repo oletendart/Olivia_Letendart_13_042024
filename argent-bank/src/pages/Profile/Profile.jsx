@@ -1,10 +1,10 @@
 import Footer from "../../components/Footer/Footer.jsx";
 import Navbar from "../../components/Navbar/Navbar.jsx";
 import TransactionItem from "../../components/TransactionItem/TransactionItem.jsx";
-import './Transaction.scss';
+import './Profile.scss';
 import jsonData from '../../data/dataTransactionItem.json';
 
-export default function Transaction() {
+export default function Profile() {
     return (
         <>
             <Navbar />
