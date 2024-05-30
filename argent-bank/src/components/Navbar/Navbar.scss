@@ -10,6 +10,12 @@
   color: #2c3e50;
 }
 
+.main-nav ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .main-nav i {
   padding: 5px;
 }
