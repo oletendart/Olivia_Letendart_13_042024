@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getLoginData, getLoginFetchData } from './API-Data.js';
 
 export const loginUser = createAsyncThunk('/login', async ({ email, password }, thunkAPI) => {
     try {
@@ -11,14 +12,16 @@ export const loginUser = createAsyncThunk('/login', async ({ email, password }, 
         });
 
         const data = await response.json();
+        const loginData = getLoginData(data);
 
         if (!response.ok) {
-            return thunkAPI.rejectWithValue(data.message || 'Login failed');
+            return thunkAPI.rejectWithValue(loginData.message || 'Login failed');
         }
 
-        localStorage.setItem('token', data.body.token);
+        console.log('token avant avoir mis dans localstorage: ', loginData.token);
+        localStorage.setItem('token', loginData.token);
 
-        return data;
+        return loginData;
     } catch (error) {
         return thunkAPI.rejectWithValue('Network error');
     }
@@ -27,6 +30,7 @@ export const loginUser = createAsyncThunk('/login', async ({ email, password }, 
 export const getUserProfile = async () => {
     try {
         const token = localStorage.getItem('token');
+        console.log('token après avoir mis dans localStorage', token);
 
         const response = await fetch('http://localhost:3001/api/v1/user/profile', {
             method: 'POST',
@@ -34,16 +38,23 @@ export const getUserProfile = async () => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
             }
-        })
+        });
 
         const data = await response.json();
+        const profileData = getLoginFetchData(data);
 
-        console.log('getUserProfile: ', data)
-        return data;
-    } catch  {
-        return console.log('Network error');
+        if (!response.ok) {
+            throw new Error(profileData.message || 'Failed to fetch user profile');
+        }
+
+        console.log('getUserProfile: ', profileData);
+        return profileData;
+    } catch (error) {
+        console.error('Fetch error: ', error);
+        return { status: 'error', message: error.message };
     }
-}
+};
+
 
 const authSlice = createSlice({
     name: 'auth',
