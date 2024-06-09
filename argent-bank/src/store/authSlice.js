@@ -16,11 +16,34 @@ export const loginUser = createAsyncThunk('/login', async ({ email, password }, 
             return thunkAPI.rejectWithValue(data.message || 'Login failed');
         }
 
+        localStorage.setItem('token', data.body.token);
+
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue('Network error');
     }
 });
+
+export const getUserProfile = async () => {
+    try {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            }
+        })
+
+        const data = await response.json();
+
+        console.log('getUserProfile: ', data)
+        return data;
+    } catch  {
+        return console.log('Network error');
+    }
+}
 
 const authSlice = createSlice({
     name: 'auth',

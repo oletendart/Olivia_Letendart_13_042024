@@ -3,16 +3,24 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 import TransactionItem from "../../components/TransactionItem/TransactionItem.jsx";
 import './Profile.scss';
 import jsonData from '../../data/dataTransactionItem.json';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {getUserProfile} from "../../store/authSlice.js";
 
 export default function Profile() {
     const user = useSelector((state) => state.auth.user);
+    const dispatch = useDispatch();
 
     console.log(user);
 
     if(!user) {
         return <p>Loading...</p>;
     }
+
+    useEffect(() => {
+        dispatch(getUserProfile)
+    }, []);
+
 
     return (
         <>
