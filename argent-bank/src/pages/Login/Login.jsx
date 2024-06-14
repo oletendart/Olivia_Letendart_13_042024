@@ -11,14 +11,15 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, user } = useSelector((state) => state.auth);
+    const { loading, error } = useSelector((state) => state.auth);
     const [credentials, setCredentials] = useState({ email: '', password: '' });
 
     const handleChange = (e) => {
-        setCredentials({
-            ...credentials,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+        setCredentials((prevCredentials) => ({
+            ...prevCredentials,
+            [name]: value,
+        }));
     };
 
     const handleSubmit = (e) => {
@@ -40,8 +41,24 @@ export default function Login() {
                     <i className="fa fa-user-circle sign-in-icon"></i>
                     <h1>Sign In</h1>
                     <form onSubmit={handleSubmit}>
-                        <InputForm htmlFor="email" text="Email" type="email" id="email" name="email" value={credentials.email} onChange={handleChange} required />
-                        <InputForm htmlFor="password" text="Password" type="password" id="password" name="password" value={credentials.password} onChange={handleChange} required />
+                        <InputForm
+                            htmlFor="email"
+                            text="Email"
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={credentials.email}
+                            onChange={handleChange}
+                            required />
+                        <InputForm
+                            htmlFor="password"
+                            text="Password"
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={credentials.password}
+                            onChange={handleChange}
+                            required />
                         <InputRemember />
                         <button className="sign-in-button" type="submit" disabled={loading}>Sign In</button>
                         {error && <p className="error">{error}</p>}

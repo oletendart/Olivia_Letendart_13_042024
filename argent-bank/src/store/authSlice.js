@@ -1,31 +1,33 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getLoginData, getLoginFetchData } from './API-Data.js';
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {  getLoginFetchData } from './API-Data.js';
 
-export const loginUser = createAsyncThunk('/login', async ({ email, password }, thunkAPI) => {
-    try {
-        const response = await fetch('http://localhost:3001/api/v1/user/login', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        });
+export const loginUser = createAsyncThunk(
+    'auth/loginUser',
+    async ({email, password}, { rejectWithValue }) => {
+        try {
+            const response = await fetch('http://localhost:3001/api/v1/user/login', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({email, password}),
+            });
 
-        const data = await response.json();
-        const loginData = getLoginData(data);
+            const data = await response.json();
 
-        if (!response.ok) {
-            return thunkAPI.rejectWithValue(loginData.message || 'Login failed');
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to log in');
+            }
+
+            // Store the token in localStorage or handle it as needed
+            localStorage.setItem('token', data.body.token);
+
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.message);
         }
-
-        console.log('token avant avoir mis dans localstorage: ', loginData.token);
-        localStorage.setItem('token', loginData.token);
-
-        return loginData;
-    } catch (error) {
-        return thunkAPI.rejectWithValue('Network error');
     }
-});
+);
 
 export const getUserProfile = async () => {
     try {
@@ -37,10 +39,11 @@ export const getUserProfile = async () => {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
-            }
+            },
         });
 
         const data = await response.json();
+        console.log(data);
         const profileData = getLoginFetchData(data);
 
         if (!response.ok) {
@@ -71,18 +74,18 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(loginUser.pending, (state) => {
-                state.isLoading = true;
+                state.loading = true;
                 state.error = null;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
-                state.isLoading = false;
+                state.loading = false;
                 state.user = action.payload;
             })
             .addCase(loginUser.rejected, (state, action) => {
-                state.isLoading = false;
+                state.loading = false;
                 state.error = action.payload;
             });
-    },
+    }
 });
 
 export const { logout } = authSlice.actions;
