@@ -1,25 +1,19 @@
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Footer from "../../components/Footer/Footer.jsx";
 import Navbar from "../../components/Navbar/Navbar.jsx";
 import TransactionItem from "../../components/TransactionItem/TransactionItem.jsx";
 import './Profile.scss';
 import jsonData from '../../data/dataTransactionItem.json';
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
-import {getUserProfile} from "../../store/authSlice.js";
+import { getUserProfile } from "../../store/authSlice.js";
 
 export default function Profile() {
-    const user = useSelector((state) => state.auth.user);
     const dispatch = useDispatch();
-
-    console.log(user);
-
-    if(!user) {
-        return <p>Loading...</p>;
-    }
+    const user = useSelector((state) => state.auth.user);
 
     useEffect(() => {
-        dispatch(getUserProfile)
-    }, []);
+        dispatch(getUserProfile());
+    }, [dispatch]);
 
 
     return (
@@ -27,7 +21,7 @@ export default function Profile() {
             <Navbar />
             <main className="main bg-dark transaction-padding">
                 <div className="header">
-                    <h1 className="margin-h1">Welcome back<br/>{user.firstname} {user.lastname} !</h1>
+                    <h1 className="margin-h1">Welcome back<br/>{user.firstName} {user.lastName} !</h1>
                     <button className="edit-button">Edit Name</button>
                 </div>
                 <h2 className="sr-only">Accounts</h2>
@@ -41,5 +35,5 @@ export default function Profile() {
             </main>
             <Footer />
         </>
-    )
+    );
 }

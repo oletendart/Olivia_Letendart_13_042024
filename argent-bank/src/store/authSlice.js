@@ -1,5 +1,4 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {  getLoginFetchData } from './API-Data.js';
 
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
@@ -29,35 +28,33 @@ export const loginUser = createAsyncThunk(
     }
 );
 
-export const getUserProfile = async () => {
-    try {
-        const token = localStorage.getItem('token');
-        console.log('token après avoir mis dans localStorage', token);
+export const getUserProfile = createAsyncThunk(
+    'auth/getUserProfile',
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
 
-        const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
-            },
-        });
+            const data = await response.json();
 
-        const data = await response.json();
-        console.log(data);
-        const profileData = getLoginFetchData(data);
+            console.log(data)
 
-        if (!response.ok) {
-            throw new Error(profileData.message || 'Failed to fetch user profile');
+            if (!response.ok) {
+                return rejectWithValue(data.message || 'Failed to fetch user profile');
+            }
+
+            return data.body;
+        } catch (error) {
+            return rejectWithValue(error.message);
         }
-
-        console.log('getUserProfile: ', profileData);
-        return profileData;
-    } catch (error) {
-        console.error('Fetch error: ', error);
-        return { status: 'error', message: error.message };
     }
-};
-
+);
 
 const authSlice = createSlice({
     name: 'auth',
@@ -83,6 +80,17 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(getUserProfile.pending, (state) => {
+            state.status = 'loading';
+            })
+            .addCase(getUserProfile.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.user = action.payload; // Stockez les données de l'utilisateur dans l'état
+            })
+            .addCase(getUserProfile.rejected, (state, action) => {
+                state.status = 'failed';
                 state.error = action.payload;
             });
     }
