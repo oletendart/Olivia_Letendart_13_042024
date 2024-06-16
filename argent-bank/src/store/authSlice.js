@@ -43,8 +43,6 @@ export const getUserProfile = createAsyncThunk(
 
             const data = await response.json();
 
-            console.log(data)
-
             if (!response.ok) {
                 return rejectWithValue(data.message || 'Failed to fetch user profile');
             }
@@ -87,7 +85,7 @@ const authSlice = createSlice({
             })
             .addCase(getUserProfile.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = action.payload; // Stockez les données de l'utilisateur dans l'état
+                state.user = action.payload;
             })
             .addCase(getUserProfile.rejected, (state, action) => {
                 state.status = 'failed';

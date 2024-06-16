@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from "../../../public/assets/argentBankLogo.webp";
 import './Navbar.scss';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/authSlice.js';
 
 export default function Navbar() {
     const { user } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [token, setToken] = useState(localStorage.getItem('token'));
+
+    useEffect(() => {
+        setToken(localStorage.getItem('token'));
+    }, [user]);
 
     const handleLogout = () => {
-        //dispatch(logoutUser());
+        localStorage.removeItem('token');
+        setToken(null);
+        dispatch(logout());
+        navigate('/login');
     };
 
     return (
@@ -23,12 +33,11 @@ export default function Navbar() {
                 <h1 className="sr-only">Argent Bank</h1>
             </Link>
             <ul>
-                {user ? (
+                {user && token ? (
                     <>
                         <li>
                             <Link to="/profile" className="main-nav-item">
                                 <i className="fa fa-user-circle"></i>
-                                {user.firstname} {user.lastname}
                             </Link>
                         </li>
                         <li>
@@ -47,5 +56,5 @@ export default function Navbar() {
                 )}
             </ul>
         </nav>
-    )
+    );
 }
