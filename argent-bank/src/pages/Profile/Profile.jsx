@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Footer from "../../components/Footer/Footer.jsx";
 import Navbar from "../../components/Navbar/Navbar.jsx";
@@ -6,30 +6,95 @@ import TransactionItem from "../../components/TransactionItem/TransactionItem.js
 import './Profile.scss';
 import jsonData from '../../data/dataTransactionItem.json';
 import { getUserProfile } from "../../store/authSlice.js";
+import InputFirstAndLastName from "../../components/InputFirstAndLastName/InputFirstAndLastName.jsx";
+import BtnProfile from "../../components/BtnProfile/BtnProfile.jsx";
 
 export default function Profile() {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
 
+    const [isEditing, setIsEditing] = useState(false);
+    const [firstName, setFirstName] = useState(user.firstName);
+    const [lastName, setLastName] = useState(user.lastName);
+
     useEffect(() => {
         dispatch(getUserProfile());
     }, [dispatch]);
 
+    useEffect(() => {
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+    }, [user]);
+
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleCancelClick = () => {
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setIsEditing(false);
+    };
+
+    const handleSaveClick = () => {
+        console.log('Saving new name:', firstName, lastName);
+        setIsEditing(false);
+    };
 
     return (
         <>
             <Navbar />
             <main className="main bg-dark transaction-padding">
                 <div className="header">
-                    <h1 className="margin-h1">Welcome back<br/>{user.firstName} {user.lastName} !</h1>
-                    <button className="edit-button">Edit Name</button>
+                    <h1 className="margin-h1">
+                        Welcome back<br/>
+                        {isEditing ? (
+                            <>
+                                <InputFirstAndLastName
+                                    type="text"
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    />
+                                <InputFirstAndLastName
+                                    type="text"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    />
+                            </>
+                        ) : (
+                            <>
+                                {user.firstName} {user.lastName}
+                            </>
+                        )}
+                    </h1>
+                    {isEditing ? (
+                        <>
+                            <BtnProfile
+                                className="save-button"
+                                onClick={handleSaveClick}
+                                text="Save"
+                                />
+                            <BtnProfile
+                                className="cancel-button"
+                                onClick={handleCancelClick}
+                                text="Cancel"
+                                />
+                        </>
+                    ) : (
+                        <BtnProfile
+                            className="edit-button"
+                            onClick={handleEditClick}
+                            text="Edit Name"
+                            />
+                    )}
                 </div>
                 <h2 className="sr-only">Accounts</h2>
                 {jsonData.map((item, index) => (
-                    <TransactionItem key={index}
-                                     title={item.title}
-                                     amount={item.amount}
-                                     description={item.description}
+                    <TransactionItem
+                        key={index}
+                        title={item.title}
+                        amount={item.amount}
+                        description={item.description}
                     />
                 ))}
             </main>
