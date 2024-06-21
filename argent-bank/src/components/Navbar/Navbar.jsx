@@ -3,7 +3,7 @@ import logo from "../../../public/assets/argentBankLogo.webp";
 import './Navbar.scss';
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../store/authSlice.js';
+import {getUserProfile, logout} from '../../store/authSlice.js';
 
 export default function Navbar() {
     const { user } = useSelector((state) => state.auth);
@@ -39,6 +39,9 @@ export default function Navbar() {
                             <Link to="/profile" className="main-nav-item">
                                 <i className="fa fa-user-circle"></i>
                             </Link>
+                        </li>
+                        <li>
+                            {user.firstName}
                         </li>
                         <li>
                             <a onClick={handleLogout} className="main-nav-item">

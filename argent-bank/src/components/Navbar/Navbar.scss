@@ -16,6 +16,11 @@
   align-items: center;
 }
 
+.main-nav li:nth-child(2) {
+  margin: 0 12px 0 0;
+  cursor: default;
+}
+
 .main-nav i {
   padding: 5px;
 }
