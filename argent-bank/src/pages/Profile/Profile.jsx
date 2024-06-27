@@ -5,7 +5,7 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 import TransactionItem from "../../components/TransactionItem/TransactionItem.jsx";
 import './Profile.scss';
 import jsonData from '../../data/dataTransactionItem.json';
-import { getUserProfile } from "../../store/authSlice.js";
+import { getUserProfile, nameChange } from "../../store/authSlice.js";
 import InputFirstAndLastName from "../../components/InputFirstAndLastName/InputFirstAndLastName.jsx";
 import BtnProfile from "../../components/BtnProfile/BtnProfile.jsx";
 
@@ -14,16 +14,18 @@ export default function Profile() {
     const user = useSelector((state) => state.auth.user);
 
     const [isEditing, setIsEditing] = useState(false);
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
+    const [firstName, setFirstName] = useState(user?.firstName || '');
+    const [lastName, setLastName] = useState(user?.lastName || '');
 
     useEffect(() => {
         dispatch(getUserProfile());
     }, [dispatch]);
 
     useEffect(() => {
-        setFirstName(user.firstName);
-        setLastName(user.lastName);
+        if (user) {
+            setFirstName(user.firstName);
+            setLastName(user.lastName);
+        }
     }, [user]);
 
     const handleEditClick = () => {
@@ -31,14 +33,19 @@ export default function Profile() {
     };
 
     const handleCancelClick = () => {
-        setFirstName(user.firstName);
-        setLastName(user.lastName);
+        if (user) {
+            setFirstName(user.firstName);
+            setLastName(user.lastName);
+        }
         setIsEditing(false);
     };
 
     const handleSaveClick = () => {
-        console.log('Saving new name:', firstName, lastName);
-        setIsEditing(false);
+        dispatch(nameChange({ firstName, lastName })).then(() => {
+            dispatch(getUserProfile()).then(() => {
+                setIsEditing(false); // Mettre à jour isEditing après la réponse de l'API
+            });
+        });
     };
 
     return (
@@ -54,16 +61,16 @@ export default function Profile() {
                                     type="text"
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    />
+                                />
                                 <InputFirstAndLastName
                                     type="text"
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    />
+                                />
                             </>
                         ) : (
                             <>
-                                {user.firstName} {user.lastName}
+                                {firstName} {lastName}
                             </>
                         )}
                     </h1>
@@ -73,19 +80,19 @@ export default function Profile() {
                                 className="save-button"
                                 onClick={handleSaveClick}
                                 text="Save"
-                                />
+                            />
                             <BtnProfile
                                 className="cancel-button"
                                 onClick={handleCancelClick}
                                 text="Cancel"
-                                />
+                            />
                         </>
                     ) : (
                         <BtnProfile
                             className="edit-button"
                             onClick={handleEditClick}
                             text="Edit Name"
-                            />
+                        />
                     )}
                 </div>
                 <h2 className="sr-only">Accounts</h2>

@@ -54,6 +54,34 @@ export const getUserProfile = createAsyncThunk(
     }
 );
 
+export const nameChange = createAsyncThunk(
+    'auth/nameChange',
+    async ({firstName, lastName}, { rejectWithValue }) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({firstName, lastName}),
+            });
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+                return rejectWithValue(data.message || 'Failed to fetch user profile');
+            }
+
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+)
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -88,6 +116,17 @@ const authSlice = createSlice({
                 state.user = action.payload;
             })
             .addCase(getUserProfile.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+            .addCase(nameChange.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(nameChange.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.user = action.payload;
+            })
+            .addCase(nameChange.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
             });

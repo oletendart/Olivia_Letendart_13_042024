@@ -3,7 +3,7 @@ import logo from "../../../public/assets/argentBankLogo.webp";
 import './Navbar.scss';
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import {getUserProfile, logout} from '../../store/authSlice.js';
+import {logout} from '../../store/authSlice.js';
 
 export default function Navbar() {
     const { user } = useSelector((state) => state.auth);
