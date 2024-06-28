@@ -43,7 +43,7 @@ export default function Profile() {
     const handleSaveClick = () => {
         dispatch(nameChange({ firstName, lastName })).then(() => {
             dispatch(getUserProfile()).then(() => {
-                setIsEditing(false); // Mettre à jour isEditing après la réponse de l'API
+                setIsEditing(false);
             });
         });
     };
